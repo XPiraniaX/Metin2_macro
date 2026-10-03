@@ -1,24 +1,28 @@
-# Metin2Macro
+# Metin2 Macro
 
-Prosta aplikacja Windows w C# / .NET 8 przeznaczona do wysyłania F3/F4 w tle.
+Macro controller do Metin2.
 
-## Domyślne ustawienia
+## Download
 
-- `R` — globalne ON/OFF
-- `F3` — co 1500 ms
-- `F4` — co 500 ms
-- aplikacja może być zminimalizowana do traya
-- interwały można zmienić w GUI
+[![Download](https://img.shields.io/badge/Download-Metin2%20Macro-brightgreen?style=for-the-badge)](../../releases/latest)
 
-## Pojedynczy EXE
+## Features
 
-W terminalu:
+- Globalny hotkey `R`
+- Automatyczne `F3`
+- Automatyczne `F4`
+- Konfigurowalne interwały
+- Minimalizacja do tray
+- Działa w tle
 
-```powershell
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
-```
+## Installation
 
-Gotowy plik:
+1. Pobierz `Metin2 Macro.exe` z najnowszego Release.
+2. Uruchom plik.
+3. Nie wymaga instalacji .NET.
 
-`bin/Release/net8.0-windows/win-x64/publish/Metin2Macro.exe`
+## Usage
 
+- `R` — włącz / wyłącz macro
+- `F3` — automatyczne klikanie
+- `F4` — automatyczne klikanie
