@@ -6,7 +6,7 @@
         <UseWindowsForms>true</UseWindowsForms>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <AssemblyName>Metin2Macro</AssemblyName>
+        <AssemblyName>Metin2 Macro</AssemblyName>
         <RootNamespace>Metin2Macro</RootNamespace>
         <ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>

@@ -62,10 +62,7 @@ public sealed class MainForm : Form
     {
         Text = "Metin2 Macro";
 
-        Icon = new Icon(
-            Path.Combine(
-                AppContext.BaseDirectory,
-                "metin2_macro_icon.ico"));
+        Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
         
         // ========================================================
         // ROZMIAR OKNA
@@ -128,10 +125,7 @@ public sealed class MainForm : Form
 
         tray = new NotifyIcon
         {
-            Icon = new Icon(
-                Path.Combine(
-                    AppContext.BaseDirectory,
-                    "metin2_macro_icon.ico")),
+            Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath),
 
             Text = "Metin2 Macro — OFF",
             Visible = true
