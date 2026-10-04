@@ -23,7 +23,11 @@ public sealed class MainForm : Form
 
     private bool enabled;
     private bool exiting;
-    private bool rWasPressed;
+    private bool hotkeyWasPressed;
+    private bool isChoosingHotkey;
+    private uint toggleVirtualKey = NativeMethods.VK_R;
+    private Label toggleHotkeyLabel = null!;
+    private Label statusHint = null!;
 
     private const int HeaderHeight = 48;
 
@@ -356,7 +360,7 @@ public sealed class MainForm : Form
             AutoSize = true
         };
 
-        var statusHint = new Label
+        statusHint = new Label
         {
             Text = "Press R to toggle",
 
@@ -454,7 +458,7 @@ public sealed class MainForm : Form
             AutoSize = true
         };
 
-        var hotkey = new Label
+        toggleHotkeyLabel = new Label
         {
             Text = "R",
 
@@ -479,8 +483,14 @@ public sealed class MainForm : Form
                 new Size(45, 32)
         };
 
+        hotkeyBox.Cursor = Cursors.Hand;
+        toggleHotkeyLabel.Cursor = Cursors.Hand;
+        hotkeyName.Cursor = Cursors.Hand;
+        hotkeyBox.Click += (_, _) => BeginHotkeySelection();
+        toggleHotkeyLabel.Click += (_, _) => BeginHotkeySelection();
+        hotkeyName.Click += (_, _) => BeginHotkeySelection();
         hotkeyBox.Controls.Add(hotkeyName);
-        hotkeyBox.Controls.Add(hotkey);
+        hotkeyBox.Controls.Add(toggleHotkeyLabel);
 
         // ========================================================
         // START / STOP
@@ -834,25 +844,21 @@ public sealed class MainForm : Form
                     NativeMethods.KBDLLHOOKSTRUCT>(
                     lParam);
 
-            if (keyDown &&
-                data.vkCode ==
-                    NativeMethods.VK_R)
+            if (keyDown && isChoosingHotkey)
             {
-                if (!rWasPressed)
+                BeginInvoke(() => SetToggleHotkey(data.vkCode));
+            }
+            else if (keyDown && data.vkCode == toggleVirtualKey)
+            {
+                if (!hotkeyWasPressed)
                 {
-                    rWasPressed = true;
-
-                    BeginInvoke(
-                        Toggle);
+                    hotkeyWasPressed = true;
+                    BeginInvoke(Toggle);
                 }
             }
 
-            if (keyUp &&
-                data.vkCode ==
-                    NativeMethods.VK_R)
-            {
-                rWasPressed = false;
-            }
+            if (keyUp && data.vkCode == toggleVirtualKey)
+                hotkeyWasPressed = false;
         }
 
         // R nie jest blokowany.
@@ -861,6 +867,31 @@ public sealed class MainForm : Form
             nCode,
             wParam,
             lParam);
+    }
+
+    private void BeginHotkeySelection()
+    {
+        isChoosingHotkey = true;
+        hotkeyWasPressed = false;
+        toggleHotkeyLabel.Text = "...";
+        statusHint.Text = "Press any key to assign";
+    }
+
+    private void SetToggleHotkey(uint virtualKey)
+    {
+        if (IsDisposed || !IsHandleCreated)
+            return;
+
+        toggleVirtualKey = virtualKey;
+        isChoosingHotkey = false;
+        hotkeyWasPressed = true;
+
+        string keyName = Enum.IsDefined(typeof(Keys), (int)virtualKey)
+            ? ((Keys)virtualKey).ToString()
+            : $"Key {virtualKey:X2}";
+
+        toggleHotkeyLabel.Text = keyName;
+        statusHint.Text = $"Press {keyName} to toggle";
     }
 
     // ============================================================
